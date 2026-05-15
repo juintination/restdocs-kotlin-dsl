@@ -2,6 +2,8 @@
 
 REST Docs Kotlin DSL 기반 Swagger UI API 문서화 프로젝트
 
+---
+
 ## DSL 구조
 
 ```
@@ -26,9 +28,9 @@ restDocs(mockMvc, "identifier") {
 }
 ```
 
-## 사용 예시
+### 사용 예시
 
-### JSON 요청/응답
+#### JSON 요청/응답
 
 ```
 restDocs(mockMvc, "foo/create") {
@@ -52,7 +54,7 @@ restDocs(mockMvc, "foo/create") {
 }
 ```
 
-### 경로 변수 + 쿼리 파라미터
+#### 경로 변수 + 쿼리 파라미터
 
 ```
 restDocs(mockMvc, "foo/list") {
@@ -78,7 +80,7 @@ restDocs(mockMvc, "foo/list") {
 }
 ```
 
-### 파일 업로드
+#### 파일 업로드
 
 ```
 restDocs(mockMvc, "foo/upload") {
@@ -105,6 +107,8 @@ restDocs(mockMvc, "foo/upload") {
     }
 }
 ```
+
+---
 
 ## DSL 상세
 
@@ -141,6 +145,8 @@ field("data.imageUrl", "이미지 URL").optional()
 
 `summary()`를 선언하면 `openapi-resource.json` 스니펫이 추가로 생성되어 Swagger UI의 operation summary에 반영된다.  
 `tag()`를 생략하면 `identifier`의 첫 번째 세그먼트(`foo/create` → `Foo`)가 자동으로 사용된다.
+
+---
 
 ## Swagger UI 문서 생성
 
