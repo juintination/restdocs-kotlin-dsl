@@ -23,7 +23,7 @@ class RequestBodyDsl {
         path: String,
         value: Any?,
         description: String,
-        type: JsonFieldType = JsonFieldType.VARIES,
+        type: JsonFieldType = value.inferJsonFieldType(),
     ): RequestFieldBuilder {
         setNestedValue(bodyMap, path.trimEnd('[', ']'), value)
         return RequestFieldBuilder(path, description, optional = false, type)
@@ -85,12 +85,22 @@ private fun String.escapeJson(): String = replace("\\", "\\\\")
     .replace("\r", "\\r")
     .replace("\t", "\\t")
 
+internal fun Any?.inferJsonFieldType(): JsonFieldType = when (this) {
+    null -> JsonFieldType.NULL
+    is Boolean -> JsonFieldType.BOOLEAN
+    is Number -> JsonFieldType.NUMBER
+    is String -> JsonFieldType.STRING
+    is Map<*, *> -> JsonFieldType.OBJECT
+    is Iterable<*>, is Array<*> -> JsonFieldType.ARRAY
+    else -> JsonFieldType.VARIES
+}
+
 /**
  * 요청 바디 필드 하나를 설정하는 빌더.
  *
  * `optional()`을 호출하면 실제 요청 바디에 해당 필드가 없어도 REST Docs 검증이 통과된다.
  * `type()`으로 필드 타입을 명시하면 생성된 스니펫 문서에 타입 정보가 포함된다.
- * 타입을 지정하지 않으면 기본값인 `VARIES`로 기록된다.
+ * 타입을 지정하지 않으면 `value`에서 자동 추론한다.
  */
 class RequestFieldBuilder internal constructor(
     private val path: String,
