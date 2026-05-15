@@ -56,7 +56,7 @@ class ProductControllerTest : RestDocsMvcTest() {
                     field("data.price", "가격 (원)", JsonFieldType.NUMBER)
                     field("data.category", "카테고리", JsonFieldType.STRING)
                     field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL").optional()
+                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
                 }
             }
         }
@@ -85,7 +85,7 @@ class ProductControllerTest : RestDocsMvcTest() {
                     field("data[].price", "가격 (원)", JsonFieldType.NUMBER)
                     field("data[].category", "카테고리", JsonFieldType.STRING)
                     field("data[].stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data[].imageUrl", "이미지 URL").optional()
+                    field("data[].imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
                 }
             }
         }
@@ -112,7 +112,7 @@ class ProductControllerTest : RestDocsMvcTest() {
                     field("data.price", "가격 (원)", JsonFieldType.NUMBER)
                     field("data.category", "카테고리", JsonFieldType.STRING)
                     field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL").optional()
+                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
                 }
             }
         }
@@ -144,7 +144,7 @@ class ProductControllerTest : RestDocsMvcTest() {
                     field("data.price", "가격 (원)", JsonFieldType.NUMBER)
                     field("data.category", "카테고리", JsonFieldType.STRING)
                     field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL").optional()
+                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
                 }
             }
         }
