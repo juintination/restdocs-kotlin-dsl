@@ -41,7 +41,7 @@ class ProductControllerTest : RestDocsMvcTest() {
                     field("name", "상품명", "상품명")
                     field("description", "상품 설명", "상품 설명")
                     field("price", 10_000L, "가격 (원)")
-                    field("category", "ELECTRONICS", "카테고리 (ELECTRONICS, CLOTHING, FOOD, BOOKS)")
+                    field("category", Category.ELECTRONICS, "카테고리 (ELECTRONICS, CLOTHING, FOOD, BOOKS)")
                     field("stock", 10, "재고 수량")
                 }
             }
@@ -69,7 +69,7 @@ class ProductControllerTest : RestDocsMvcTest() {
             request {
                 get("/api/products")
                 queryParameters {
-                    param("category", "ELECTRONICS", "카테고리 필터").optional()
+                    param("category", Category.ELECTRONICS.name, "카테고리 필터").optional()
                     param("minPrice", "1000", "최소 가격 필터").optional()
                     param("maxPrice", "50000", "최대 가격 필터").optional()
                 }
