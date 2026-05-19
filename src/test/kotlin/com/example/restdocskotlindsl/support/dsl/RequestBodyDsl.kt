@@ -90,6 +90,7 @@ internal fun Any?.inferJsonFieldType(): JsonFieldType = when (this) {
     is Boolean -> JsonFieldType.BOOLEAN
     is Number -> JsonFieldType.NUMBER
     is String -> JsonFieldType.STRING
+    is Enum<*> -> JsonFieldType.STRING
     is Map<*, *> -> JsonFieldType.OBJECT
     is Iterable<*>, is Array<*> -> JsonFieldType.ARRAY
     else -> JsonFieldType.VARIES
