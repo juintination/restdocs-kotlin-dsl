@@ -23,7 +23,11 @@ restDocs(mockMvc, "identifier") {
 
     response {
         status(200)
-        body { field("path", "description", JsonFieldType.STRING) }
+        body {
+            field("path", "description", JsonFieldType.STRING)
+            obj("path", "description") { field("nested", "description", JsonFieldType.STRING) }
+            array("path", "description") { field("item", "description", JsonFieldType.STRING) }
+        }
     }
 }
 ```
@@ -46,9 +50,11 @@ restDocs(mockMvc, "foo/create") {
         status(201)
         body {
             field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-            field("data.id", "생성된 ID", JsonFieldType.NUMBER)
-            field("data.name", "이름", JsonFieldType.STRING)
-            field("data.imageUrl", "이미지 URL").optional()
+            obj("data", "생성된 리소스") {
+                field("id", "리소스 ID", JsonFieldType.NUMBER)
+                field("name", "이름", JsonFieldType.STRING)
+                field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+            }
         }
     }
 }
@@ -72,9 +78,10 @@ restDocs(mockMvc, "foo/list") {
     response {
         status(200)
         body {
-            field("data", "목록", JsonFieldType.ARRAY)
-            field("data[].id", "ID", JsonFieldType.NUMBER)
-            field("data[].name", "이름", JsonFieldType.STRING)
+            array("data", "리소스 목록") {
+                field("id", "리소스 ID", JsonFieldType.NUMBER)
+                field("name", "이름", JsonFieldType.STRING)
+            }
         }
     }
 }
@@ -102,7 +109,9 @@ restDocs(mockMvc, "foo/upload") {
     response {
         status(200)
         body {
-            field("data.imageUrl", "저장된 이미지 경로", JsonFieldType.STRING)
+            obj("data", "응답 데이터") {
+                field("imageUrl", "저장된 이미지 경로", JsonFieldType.STRING)
+            }
         }
     }
 }
@@ -114,15 +123,15 @@ restDocs(mockMvc, "foo/upload") {
 
 ### `request { }`
 
-| 메서드                                      | 설명                                                     |
-|------------------------------------------|--------------------------------------------------------|
-| `get / post / put / patch / delete(url)` | HTTP 메서드와 URL 템플릿 지정                                   |
-| `header(name, value)`                    | 요청 헤더 추가                                               |
-| `pathParameters { }`                     | URL 경로 변수 선언. 선언 순서가 URL 템플릿의 `{변수}` 순서와 일치해야 한다       |
-| `queryParameters { }`                    | 쿼리 파라미터 선언. `value`를 `null`로 넘기면 요청에서 제외된다             |
-| `body { }`                               | JSON 요청 바디. `field()` 선언 순서대로 JSON이 조립된다               |
-| `form { }`                               | `application/x-www-form-urlencoded` 요청                 |
-| `multipart { }`                          | `multipart/form-data` 요청. `file()`과 `text()`를 혼용할 수 있다 |
+| 메서드                                      | 설명                                                                                    |
+|------------------------------------------|---------------------------------------------------------------------------------------|
+| `get / post / put / patch / delete(url)` | HTTP 메서드와 URL 템플릿 지정                                                                  |
+| `header(name, value)`                    | 요청 헤더 추가                                                                              |
+| `pathParameters { }`                     | URL 경로 변수 선언. 선언 순서가 URL 템플릿의 `{변수}` 순서와 일치해야 한다                                      |
+| `queryParameters { }`                    | 쿼리 파라미터 선언. `value`를 `null`로 넘기면 요청에서 제외된다                                            |
+| `body { }`                               | JSON 요청 바디. `field()` 선언 순서대로 JSON이 조립된다. 이미 직렬화된 JSON이 있으면 `rawJson()`으로 직접 지정할 수 있다 |
+| `form { }`                               | `application/x-www-form-urlencoded` 요청                                                |
+| `multipart { }`                          | `multipart/form-data` 요청. `file()`과 `text()`를 혼용할 수 있다                                |
 
 `body`, `form`, `multipart`를 함께 선언하면 `multipart → form → body` 순으로 하나만 적용된다.
 
@@ -133,12 +142,19 @@ restDocs(mockMvc, "foo/upload") {
 | `status(code)` | 기대하는 HTTP 상태 코드. 생략 시 200                |
 | `body { }`     | 응답 바디 필드 문서화. 실제 응답에 있는 필드를 빠짐없이 선언해야 한다 |
 
-### `field().optional()`
+### `.optional()`
 
-요청·응답 모두 `field()` 뒤에 `.optional()`을 체이닝할 수 있다.
+요청·응답 바디의 `field()`, 응답 바디의 `obj()`·`array()`, 쿼리 파라미터의 `param()` 뒤에 `.optional()`을 체이닝할 수 있다.
 
 ```
-field("data.imageUrl", "이미지 URL").optional()
+// 응답 바디 — field, obj, array 모두 지원
+obj("data", "응답 데이터") {
+    field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+}
+array("tags", "태그 목록") { ... }.optional()
+
+// 쿼리 파라미터
+param("page", "1", "페이지 번호").optional()
 ```
 
 ### `summary()` / `tag()`
