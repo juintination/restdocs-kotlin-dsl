@@ -7,15 +7,15 @@ import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 /**
  * JSON 응답 바디를 필드 단위로 문서화하는 DSL.
  *
- * 중첩 필드는 점 표기법(`profile.city`), 배열 요소는 `[].field` 형식으로 지정한다.
+ * 단순 필드는 `field()`로 선언하고, 중첩 객체는 `obj { }`, 배열은 `array { }` 블록으로 선언한다.
+ * 블록 안에서 선언한 필드 경로에는 부모 경로가 자동으로 prefix로 붙는다.
  *
  * REST Docs는 응답 바디에 존재하는 필드를 빠짐없이 문서화하도록 강제한다.
- * 실제 응답에 있는 필드를 `field()`로 선언하지 않으면 테스트가 실패하므로,
- * 응답 구조가 바뀌면 이 DSL도 함께 수정해야 한다.
+ * 실제 응답에 있는 필드를 선언하지 않으면 테스트가 실패하므로, 응답 구조가 바뀌면 이 DSL도 함께 수정해야 한다.
  * 문서화하고 싶지 않은 필드가 있다면 `optional()`을 체이닝해 선택 항목으로 처리할 수 있다.
  */
 @RestDocsDslMarker
-class ResponseBodyDsl {
+class ResponseBodyDsl(private val prefix: String = "") {
     private val fieldBuilders = mutableListOf<ResponseFieldBuilder>()
 
     fun field(
@@ -23,8 +23,30 @@ class ResponseBodyDsl {
         description: String,
         type: JsonFieldType = JsonFieldType.VARIES,
     ): ResponseFieldBuilder =
-        ResponseFieldBuilder(path, description, optional = false, type)
+        ResponseFieldBuilder(prefix + path, description, optional = false, type)
             .also { fieldBuilders += it }
+
+    fun obj(
+        path: String,
+        description: String,
+        block: ResponseBodyDsl.() -> Unit,
+    ): ResponseFieldBuilder {
+        val builder = ResponseFieldBuilder(prefix + path, description, optional = false, JsonFieldType.OBJECT)
+        fieldBuilders += builder
+        ResponseBodyDsl("$prefix$path.").apply(block).fieldBuilders.forEach { fieldBuilders += it }
+        return builder
+    }
+
+    fun array(
+        path: String,
+        description: String,
+        block: ResponseBodyDsl.() -> Unit,
+    ): ResponseFieldBuilder {
+        val builder = ResponseFieldBuilder(prefix + path, description, optional = false, JsonFieldType.ARRAY)
+        fieldBuilders += builder
+        ResponseBodyDsl("$prefix$path[].").apply(block).fieldBuilders.forEach { fieldBuilders += it }
+        return builder
+    }
 
     internal fun descriptors(): List<FieldDescriptor> = fieldBuilders.map { it.build() }
 }
