@@ -49,14 +49,15 @@ class ProductControllerTest : RestDocsMvcTest() {
                 status(201)
                 body {
                     field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-                    field("data", "응답 데이터", JsonFieldType.OBJECT)
-                    field("data.id", "생성된 상품 ID", JsonFieldType.NUMBER)
-                    field("data.name", "상품명", JsonFieldType.STRING)
-                    field("data.description", "상품 설명", JsonFieldType.STRING)
-                    field("data.price", "가격 (원)", JsonFieldType.NUMBER)
-                    field("data.category", "카테고리", JsonFieldType.STRING)
-                    field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    obj("data", "응답 데이터") {
+                        field("id", "생성된 상품 ID", JsonFieldType.NUMBER)
+                        field("name", "상품명", JsonFieldType.STRING)
+                        field("description", "상품 설명", JsonFieldType.STRING)
+                        field("price", "가격 (원)", JsonFieldType.NUMBER)
+                        field("category", "카테고리", JsonFieldType.STRING)
+                        field("stock", "재고 수량", JsonFieldType.NUMBER)
+                        field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    }
                 }
             }
         }
@@ -78,14 +79,15 @@ class ProductControllerTest : RestDocsMvcTest() {
                 status(200)
                 body {
                     field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-                    field("data", "응답 데이터 목록", JsonFieldType.ARRAY)
-                    field("data[].id", "상품 ID", JsonFieldType.NUMBER)
-                    field("data[].name", "상품명", JsonFieldType.STRING)
-                    field("data[].description", "상품 설명", JsonFieldType.STRING)
-                    field("data[].price", "가격 (원)", JsonFieldType.NUMBER)
-                    field("data[].category", "카테고리", JsonFieldType.STRING)
-                    field("data[].stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data[].imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    array("data", "응답 데이터 목록") {
+                        field("id", "상품 ID", JsonFieldType.NUMBER)
+                        field("name", "상품명", JsonFieldType.STRING)
+                        field("description", "상품 설명", JsonFieldType.STRING)
+                        field("price", "가격 (원)", JsonFieldType.NUMBER)
+                        field("category", "카테고리", JsonFieldType.STRING)
+                        field("stock", "재고 수량", JsonFieldType.NUMBER)
+                        field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    }
                 }
             }
         }
@@ -105,14 +107,15 @@ class ProductControllerTest : RestDocsMvcTest() {
                 status(200)
                 body {
                     field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-                    field("data", "응답 데이터", JsonFieldType.OBJECT)
-                    field("data.id", "상품 ID", JsonFieldType.NUMBER)
-                    field("data.name", "상품명", JsonFieldType.STRING)
-                    field("data.description", "상품 설명", JsonFieldType.STRING)
-                    field("data.price", "가격 (원)", JsonFieldType.NUMBER)
-                    field("data.category", "카테고리", JsonFieldType.STRING)
-                    field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    obj("data", "응답 데이터") {
+                        field("id", "상품 ID", JsonFieldType.NUMBER)
+                        field("name", "상품명", JsonFieldType.STRING)
+                        field("description", "상품 설명", JsonFieldType.STRING)
+                        field("price", "가격 (원)", JsonFieldType.NUMBER)
+                        field("category", "카테고리", JsonFieldType.STRING)
+                        field("stock", "재고 수량", JsonFieldType.NUMBER)
+                        field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    }
                 }
             }
         }
@@ -137,14 +140,15 @@ class ProductControllerTest : RestDocsMvcTest() {
                 status(200)
                 body {
                     field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-                    field("data", "응답 데이터", JsonFieldType.OBJECT)
-                    field("data.id", "상품 ID", JsonFieldType.NUMBER)
-                    field("data.name", "상품명", JsonFieldType.STRING)
-                    field("data.description", "상품 설명", JsonFieldType.STRING)
-                    field("data.price", "가격 (원)", JsonFieldType.NUMBER)
-                    field("data.category", "카테고리", JsonFieldType.STRING)
-                    field("data.stock", "재고 수량", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    obj("data", "응답 데이터") {
+                        field("id", "상품 ID", JsonFieldType.NUMBER)
+                        field("name", "상품명", JsonFieldType.STRING)
+                        field("description", "상품 설명", JsonFieldType.STRING)
+                        field("price", "가격 (원)", JsonFieldType.NUMBER)
+                        field("category", "카테고리", JsonFieldType.STRING)
+                        field("stock", "재고 수량", JsonFieldType.NUMBER)
+                        field("imageUrl", "이미지 URL", JsonFieldType.STRING).optional()
+                    }
                 }
             }
         }
@@ -188,9 +192,10 @@ class ProductControllerTest : RestDocsMvcTest() {
                 status(200)
                 body {
                     field("success", "요청 성공 여부", JsonFieldType.BOOLEAN)
-                    field("data", "응답 데이터", JsonFieldType.OBJECT)
-                    field("data.id", "상품 ID", JsonFieldType.NUMBER)
-                    field("data.imageUrl", "저장된 이미지 경로", JsonFieldType.STRING)
+                    obj("data", "응답 데이터") {
+                        field("id", "상품 ID", JsonFieldType.NUMBER)
+                        field("imageUrl", "저장된 이미지 경로", JsonFieldType.STRING)
+                    }
                 }
             }
         }
